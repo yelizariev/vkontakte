@@ -224,10 +224,15 @@ hex(N) when N >= 10, N < 16 ->
 
 
 vkontakte_invoke(APPSecret, AccessToken, Method, Args) ->
-  {MegaSec, Sec, Usec} = erlang:now(),
-  Timestamp = MegaSec*1000000+Sec,
-  Rand = Sec*1000000+Usec,
-  Required = [{"timestamp", Timestamp}, {"random", Rand}, {"access_token", AccessToken}, {"client_secret", APPSecret}],
+  %{MegaSec, Sec, Usec} = erlang:now(),
+  %Timestamp = MegaSec*1000000+Sec,
+  %Rand = Sec*1000000+Usec,
+	Required0 = [{"v", "5.4"}],
+  Required =
+		case Method of
+			"users.get"->Required0;
+			_-> [{"client_secret", APPSecret}, {"access_token", AccessToken}]++Required0
+		end,
 	URL = lists:concat(["https://api.vkontakte.ru/method/",
 	                    Method, "?"]
 	                   ++ lists:foldl(fun({Key, Value}, Acc) ->
