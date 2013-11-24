@@ -233,15 +233,14 @@ vkontakte_invoke(APPSecret, AccessToken, Method, Args) ->
 			"users.get"->Required0;
 			_-> [{"client_secret", APPSecret}, {"access_token", AccessToken}]++Required0
 		end,
-	URL = lists:concat(["https://api.vkontakte.ru/method/",
-	                    Method, "?"]
-	                   ++ lists:foldl(fun({Key, Value}, Acc) ->
+	URL = lists:concat(["https://api.vkontakte.ru/method/", Method]),
+	Body = lists:concat(lists:foldl(fun({Key, Value}, Acc) ->
 			                                  [Key,
 			                                   "=",
 			                                   to_list(Value), "&" | Acc]
 	                                  end, [], Required++Args)),
 	%io:format("URL=~p~n", [URL]),
-	{ok, Request} = httpc:request(get, {URL, []}, [], [{sync, false}, {receiver, self()}]), %% TODO: stream
+	{ok, Request} = httpc:request(post, {URL, [], "application/x-www-form-urlencoded", Body}, [], [{sync, false}, {receiver, self()}]), %% TODO: stream
   {ok, Request}.
 
 
