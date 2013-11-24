@@ -1,0 +1,12 @@
+{application, vkontakte,
+ [{description, "vkontakte api"},
+  {vsn, "1.0"},
+  {modules, [
+            ]},
+  {registered, [
+               ]},
+  {included_applications, []},
+  {applications, [kernel, stdlib]},
+  {env, []},
+  {mod, {vkontakte, []}}
+ ]}.
